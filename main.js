@@ -1,13 +1,13 @@
 const gameBoard = (function() {
   const gameBoard = [["", "", ""],["", "", ""],["", "", ""]];
   
-  const placeMark = () => {
-    let choose = window.prompt("select row and column: a, b").split(", ");
-    gameBoard[+choose[0]][+choose[1]] = "x";
+  const placeMark = (currentPlayer, choose) => {
+    gameBoard[+choose[0]][+choose[1]] = currentPlayer.mark;
     console.log(gameBoard[0]);
-    gameCheck();
   }
+
   const showBoard = () => gameBoard;
+
   const gameStatus = () => {
     let status;
     let winner;
@@ -42,9 +42,34 @@ const gameBoard = (function() {
         winner,
       }
   }
+
+  return {
+    placeMark, 
+    showBoard,
+    gameStatus,
+  }
+})();
+
+const game = (function() { 
+  const player1 = player("a", "x");
+  const player2 = player("b", "o");
+  let currentPlayer = player1;
+
+  const switchPlayer = () => {
+    currentPlayer = (currentPlayer === player1) ? player2 : player1;
+  }
+
+  const playerTurn = () => {
+    let choose = window.prompt("select row and column: a, b").split(", ");
+    if (gameBoard.showBoard()[+choose[0]][+choose[1]] !== "") return;
+    gameBoard.placeMark(currentPlayer, choose);
+    gameCheck();
+    switchPlayer();
+  }
+
   const gameCheck = () => {
-    if (gameStatus().status === "end") {
-      console.log(`Winner is ${gameStatus().winner}`);
+    if (gameBoard.gameStatus().status === "end") {
+      console.log(`Winner is ${gameBoard.gameStatus().winner}`);
       // gameReset();
     }
     else {
@@ -54,12 +79,12 @@ const gameBoard = (function() {
       //some func
     }
   }
+
   return {
-    placeMark, 
-    showBoard,
+    playerTurn,
   }
 })();
 
-const game = (function() { 
-
-})();
+const player = (name, mark) => {
+  return {name, mark}
+}
