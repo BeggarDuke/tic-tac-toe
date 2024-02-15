@@ -8,13 +8,6 @@ const gameBoard = (function() {
     gameCheck();
   }
   const showBoard = () => gameBoard;
-  return {
-    placeMark, 
-    showBoard,
-  }
-})();
-
-const game = (function() { 
   const gameStatus = () => {
     let status;
     let winner;
@@ -61,6 +54,12 @@ const game = (function() {
       //some func
     }
   }
+  return {
+    placeMark, 
+    showBoard,
+  }
 })();
 
-console.log(gameBoard.show());
+const game = (function() { 
+
+})();
