@@ -1,8 +1,36 @@
+const domData = (function() {
+  let display = document.querySelectorAll(".game-display div");
+  let announce = document.querySelector(".game-announce h2");
+  display.forEach((item) => {
+    item.addEventListener("click", () => {
+      console.log(item);
+      if (item.innerText !== "") return;
+      console.log(true);
+      item.innerText = game.cPlayer().mark;
+      game.playerTurn();
+    });
+  });
+  return {
+    display,
+    announce,
+  }
+})();
+
 const gameBoard = (function() {
   const gameBoard = [["", "", ""],["", "", ""],["", "", ""]];
   
-  const placeMark = (currentPlayer, choose) => {
-    gameBoard[+choose[0]][+choose[1]] = currentPlayer.mark;
+  const placeMark = () => {
+    for (i=0; i<domData.display.length;i++) {
+      if (i<3) {
+        showBoard()[0][i] = domData.display[i].textContent;
+      }
+      else if (i>2 && i<6) {
+        showBoard()[1][i-3] = domData.display[i].textContent;
+      }
+      else if (i>5 && i<9) {
+        showBoard()[2][i-6] = domData.display[i].textContent;
+      }
+    }
     console.table(gameBoard);
   }
 
@@ -19,18 +47,18 @@ const player = (name, mark) => {
 }
 
 const game = (function() { 
-  const player1 = player("Player 1", "x");
-  const player2 = player("Player 2", "o");
+  const player1 = player("Player 1", "X");
+  const player2 = player("Player 2", "O");
   let currentPlayer = player1;
 
   const switchPlayer = () => {
     currentPlayer = (currentPlayer === player1) ? player2 : player1;
   }
 
+  const cPlayer = () => currentPlayer;
+
   const playerTurn = () => {
-    let choose = window.prompt("select row and column: a, b").split(", ");
-    if (gameBoard.showBoard()[+choose[0]][+choose[1]] !== "") return;
-    gameBoard.placeMark(currentPlayer, choose);
+    gameBoard.placeMark();
     gameCheck();
     switchPlayer();
   }
@@ -73,17 +101,24 @@ const game = (function() {
   const gameCheck = () => {
     let winner = "";
     if (gameStatus().status === "end") {
-      winner = (gameStatus().winnerMark === player1.mark) 
-      ? player1.name 
-      : player2.name;
+      winner =
+        gameStatus().winnerMark === player1.mark ? player1.name : player2.name;
       console.log(winner);
+      domData.announce.textContent = `winner is ${winner}`;
       gameReset();
-    }
-    else if (gameBoard.showBoard().every((item) => item === "x" || item === "o")){
-      console.log("tie")
-    }
-    else {
+    } else if (
+      gameBoard
+        .showBoard()[0]
+        .concat(gameBoard.showBoard()[1], gameBoard.showBoard()[2])
+        .every((item) => item !== "")
+    ) {
+      console.log("tie");
+      domData.announce.textContent = "Tie";
+      gameReset();
+    } else {
       console.log("game isn't finished yet");
+      domData.announce.textContent = "game isn't finished yet";
+      // gameReset();
     }
     function gameReset() {
       gameBoard.showBoard().splice(0);
@@ -92,15 +127,14 @@ const game = (function() {
       gameStatus().winnerMark = "";
       winner = "";
       currentPlayer = player1;
+      domData.display.forEach((item) => item.textContent = "");
     }
   }
-
   return {
     player1,
     player2,
     playerTurn,
     gameCheck,
+    cPlayer,
   }
 })();
-
-// tie condition (every element on array !== "" and status !== "end")
