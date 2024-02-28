@@ -49,3 +49,19 @@
   font-size: 180px;
   background-color: antiquewhite;
 }
+
+.footer {
+  display: flex;
+  flex-flow: row nowrap;
+}
+.footer div {
+  background-color: antiquewhite;
+  height: fit-content;
+  width: 280px;
+  text-align: center;
+  font-size: 48px;
+  margin: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+}

@@ -1,15 +1,23 @@
 const domData = (function() {
-  let display = document.querySelectorAll(".game-display div");
-  let announce = document.querySelector(".game-announce h2");
+  const display = document.querySelectorAll(".game-display div");
+  const announce = document.querySelector(".game-announce h2");
+  const playerBox = document.querySelectorAll(".footer div");
   display.forEach((item) => {
     item.addEventListener("click", () => {
-      console.log(item);
       if (item.innerText !== "") return;
-      console.log(true);
       item.innerText = game.cPlayer().mark;
       game.playerTurn();
     });
   });
+  playerBox[0].addEventListener("click", (item) => {
+    item.target.textContent = prompt();
+    game.player1.name = item.target.textContent;
+  });
+  playerBox[1].addEventListener("click", (item) => {
+    item.target.textContent = prompt();
+    game.player2.name = item.target.textContent;
+  });
+  
   return {
     display,
     announce,
@@ -31,7 +39,6 @@ const gameBoard = (function() {
         showBoard()[2][i-6] = domData.display[i].textContent;
       }
     }
-    console.table(gameBoard);
   }
 
   const showBoard = () => gameBoard;
@@ -42,11 +49,10 @@ const gameBoard = (function() {
   }
 })();
 
-const player = (name, mark) => {
-  return {name, mark}
-}
-
 const game = (function() { 
+  const player = (name, mark) => {
+    return {name, mark}
+  }
   const player1 = player("Player 1", "X");
   const player2 = player("Player 2", "O");
   let currentPlayer = player1;
@@ -103,8 +109,7 @@ const game = (function() {
     if (gameStatus().status === "end") {
       winner =
         gameStatus().winnerMark === player1.mark ? player1.name : player2.name;
-      console.log(winner);
-      domData.announce.textContent = `winner is ${winner}`;
+      domData.announce.textContent = `The winner is ${winner}`;
       gameReset();
     } else if (
       gameBoard
@@ -112,13 +117,10 @@ const game = (function() {
         .concat(gameBoard.showBoard()[1], gameBoard.showBoard()[2])
         .every((item) => item !== "")
     ) {
-      console.log("tie");
       domData.announce.textContent = "Tie";
       gameReset();
     } else {
-      console.log("game isn't finished yet");
       domData.announce.textContent = "game isn't finished yet";
-      // gameReset();
     }
     function gameReset() {
       gameBoard.showBoard().splice(0);
