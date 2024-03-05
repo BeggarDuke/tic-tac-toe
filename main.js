@@ -2,6 +2,7 @@ const domData = (function() {
   const display = document.querySelectorAll(".game-display div");
   const announce = document.querySelector(".game-announce h2");
   const playerBox = document.querySelectorAll(".footer div");
+  announce.textContent = "Player one's turn";
   display.forEach((item) => {
     item.addEventListener("click", () => {
       if (item.innerText !== "") return;
@@ -10,12 +11,18 @@ const domData = (function() {
     });
   });
   playerBox[0].addEventListener("click", (item) => {
-    item.target.textContent = prompt();
-    game.player1.name = item.target.textContent;
+    const name = prompt();
+    if (name === null) return;
+    item.target.textContent = name;
+    game.player1.name = name;
+    game.gameCheck();
   });
   playerBox[1].addEventListener("click", (item) => {
-    item.target.textContent = prompt();
-    game.player2.name = item.target.textContent;
+    const name = prompt();
+    if (name === null) return;
+    item.target.textContent = name;
+    game.player2.name = name;
+    game.gameCheck();
   });
   
   return {
@@ -109,7 +116,7 @@ const game = (function() {
     if (gameStatus().status === "end") {
       winner =
         gameStatus().winnerMark === player1.mark ? player1.name : player2.name;
-      domData.announce.textContent = `The winner is ${winner}`;
+      alert(`The winner is ${winner}`);
       gameReset();
     } else if (
       gameBoard
@@ -122,10 +129,10 @@ const game = (function() {
     } else {
       switch (currentPlayer) {
         case player1: 
-          domData.announce.textContent = "Player one's turn";
+          domData.announce.textContent = `${currentPlayer.name}'s turn`;
           break;
         case player2: 
-          domData.announce.textContent = "Player two's turn";
+          domData.announce.textContent = `${currentPlayer.name}'s turn`;
           break;
       }
       
@@ -137,6 +144,7 @@ const game = (function() {
       gameStatus().winnerMark = "";
       winner = "";
       currentPlayer = player1;
+      domData.announce.textContent = "Player one's turn";
       domData.display.forEach((item) => item.textContent = "");
     }
   }
