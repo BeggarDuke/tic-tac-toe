@@ -65,8 +65,8 @@ const game = (function() {
 
   const playerTurn = () => {
     gameBoard.placeMark();
-    gameCheck();
     switchPlayer();
+    gameCheck();
   }
 
   const gameStatus = () => {
@@ -120,7 +120,15 @@ const game = (function() {
       domData.announce.textContent = "Tie";
       gameReset();
     } else {
-      domData.announce.textContent = "game isn't finished yet";
+      switch (currentPlayer) {
+        case player1: 
+          domData.announce.textContent = "Player one's turn";
+          break;
+        case player2: 
+          domData.announce.textContent = "Player two's turn";
+          break;
+      }
+      
     }
     function gameReset() {
       gameBoard.showBoard().splice(0);
