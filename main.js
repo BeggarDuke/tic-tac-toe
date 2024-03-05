@@ -144,7 +144,7 @@ const game = (function() {
       gameStatus().winnerMark = "";
       winner = "";
       currentPlayer = player1;
-      domData.announce.textContent = "Player one's turn";
+      domData.announce.textContent = `${currentPlayer.name}'s turn`;
       domData.display.forEach((item) => item.textContent = "");
     }
   }
