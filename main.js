@@ -124,7 +124,7 @@ const game = (function() {
         .concat(gameBoard.showBoard()[1], gameBoard.showBoard()[2])
         .every((item) => item !== "")
     ) {
-      domData.announce.textContent = "Tie";
+      alert("Tie");
       gameReset();
     } else {
       switch (currentPlayer) {
